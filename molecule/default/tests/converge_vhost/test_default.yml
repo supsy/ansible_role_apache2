@@ -15,3 +15,17 @@ file:
     linked-to: ../mods-available/mpm_prefork.load
   /etc/apache2/mods-enabled/mpm_event.load:
     exists: false
+  /etc/apache2/sites-enabled/www.test.local.conf:
+    exists: true
+    filetype: symlink
+    linked-to: ../sites-available/www.test.local.conf
+  /etc/apache2/sites-available/www.test.local.conf:
+    exists: true
+    contains:
+      - RewriteRule ^/(.*)$ https://www.test.local/$1 [L,R=301]
+      - <Directory "/opt/netbox/netbox/static">
+      - Alias /static /opt/netbox/netbox/static
+      - ErrorLog /var/www/vhosts/www.test.local/logs/error.log
+      - RequestHeader set "X-Forwarded-Proto" expr=%{REQUEST_SCHEME}
+  /var/www/vhosts/www.test.local/logs/access.log:
+    exists: true

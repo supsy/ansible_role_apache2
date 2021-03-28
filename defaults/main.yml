@@ -13,7 +13,7 @@ apache2__enable_mod_proxy: False
 apache2__enable_mod_proxy_http: False
 apache2__enable_mod_proxy_fcgi: False
 
-apache2__vhosts_defaults_vhost_root: /var/www
+apache2__vhosts_defaults_vhost_root: /var/www/vhosts
 apache2__vhosts_defaults_port80_enforce_ssl: False
 apache2__vhosts_defaults_enable_port443: False
 apache2__vhosts_defaults_username: root
