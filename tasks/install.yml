@@ -1,0 +1,8 @@
+## Apache2 Install Tasks
+---
+
+- name: install | Install apache2 and required packages for debian
+  apt: 
+    name: "{{ apache2__packages }}"
+    state: present
+  when: ansible_os_family == 'Debian'

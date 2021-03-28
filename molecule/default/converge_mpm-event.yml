@@ -1,0 +1,12 @@
+---
+- name: Converge
+  hosts: all
+
+  roles:
+    - role: apache2
+      vars:
+        apache2__enable_mod_http2: True
+        apache2__enable_mod_security2: True
+        apache2__enable_mod_expires: True
+        apache2__enable_mod_proxy_http: True
+        apache2__mpm: 'event'

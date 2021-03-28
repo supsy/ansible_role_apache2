@@ -1,0 +1,24 @@
+{{ '# FILE MANAGED BY ANSIBLE' if apache2__show_ansible_management -}}
+
+<Directory /var/www/>
+        Options SymLinksIfOwnerMatch
+        AllowOverride None
+        Require all denied
+</Directory>
+
+# General deny security relevant files/folders
+<DirectoryMatch "/\.git">
+	Require all denied
+</DirectoryMatch>
+<FilesMatch ".+\.sql$">
+	Require all denied
+</FilesMatch>
+<FilesMatch ".+\.htaccess$">
+	Require all denied
+</FilesMatch>
+
+{% if apache2__security_custom_parameters -%}
+{% for custom_parameter in apache2__security_custom_parameters -%}
+{{ custom_parameter }}
+{% endfor %}
+{% endif %}

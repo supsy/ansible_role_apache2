@@ -1,0 +1,9 @@
+## Apache2 mod_expires config
+
+- name: config | module | expires | Enable mod_expires
+  apache2_module: 
+    name: expires
+    state: present
+    ignore_configcheck: yes
+  notify:
+    - Test apache2 and reload

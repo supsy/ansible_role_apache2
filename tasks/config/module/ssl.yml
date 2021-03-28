@@ -1,0 +1,9 @@
+## Apache2 mod_ssl config
+
+- name: config | module | ssl | Enable mod_ssl
+  apache2_module:
+    name: ssl
+    state: present
+    ignore_configcheck: yes
+  notify:
+    - Test apache2 and reload

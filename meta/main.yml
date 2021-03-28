@@ -1,0 +1,23 @@
+galaxy_info:
+  author: supsy
+  description: Installation for apache2
+
+  issue_tracker_url: https://gitlab.com/supsy/ansible/role_apache2
+
+  license: MIT
+
+  min_ansible_version: 2.4
+
+  platforms:
+    - name: Debian
+      versions:
+        - stretch
+        - buster
+    - name: Ubuntu
+      versions:
+        - focal
+
+
+  galaxy_tags: ['apache2']
+
+dependencies: []

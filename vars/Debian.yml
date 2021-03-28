@@ -1,0 +1,13 @@
+apache2__packages:
+  - apache2
+apache2__mpm_itk_packages:
+  - libapache2-mpm-itk
+  - libapache2-mod-rpaf
+
+apache2__app_path: "/etc/apache2"
+apache2__config_path: "{{ apache2__app_path }}/conf-available"
+apache2__config_mods_path: "{{ apache2__app_path }}/mods-available"
+apache2__config_vhost_path: "{{ apache2__app_path }}/sites-available/"
+apache2__user: "www-data"
+apache2__group: "www-data"
+  

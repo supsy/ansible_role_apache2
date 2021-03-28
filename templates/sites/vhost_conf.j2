@@ -1,0 +1,136 @@
+{{ '# FILE MANAGED BY ANSIBLE' if apache2__show_ansible_management -}}
+
+<VirtualHost *:80>
+        ServerName {{ vhost.name }}
+        {% if 'serveralias' in vhost -%}
+        {% for serveralias in vhost.serveralias -%}
+        ServerAlias {{ serveralias }}
+        {% endfor -%}
+        {%- endif -%}
+
+        {%- if 'admin_email' in vhost -%}
+        ServerAdmin {{ vhost.admin_email }}
+        {% endif %}
+
+        {%- if 'document_root' in vhost and vhost.document_root -%}
+        DocumentRoot {{ vhost.document_root }}
+        {% endif %}
+
+        {% if 'port80_directory' not in vhost -%}
+        <Directory {{ vhost.document_root }}>
+                Options -Indexes +FollowSymLinks +MultiViews
+                AllowOverride {{ vhost.document_root_allow_override | default('None') }}
+        </Directory>
+        {% else -%}
+                {%- set directories = vhost.port80_directory -%}
+                {% include 'directory.j2' %}
+        {% endif -%}
+
+        {% if 'port80_alias' in vhost -%}
+
+                {% set aliases = vhost.port80_alias %}
+                {% include 'alias.j2' %}
+
+        {% endif -%}
+
+        {% if 'phpfpm_version' in vhost %}
+
+        <FilesMatch ".+\.ph(ar|p|html)$">
+                SetHandler "proxy:unix:/var/run/php{{ vhost.phpfpm_version }}-fpm-{{ vhost.name }}.sock|fcgi://localhost"
+        </FilesMatch>
+        <FilesMatch ".+\.phps$">
+                # Deny access to raw php sources by default
+                Require all denied
+        </FilesMatch>
+        <FilesMatch "^\.ph(ar|p|html)$">
+                # Deny access to files without filename (e.g. '.php')
+                Require all denied
+        </FilesMatch>
+        {% endif %}
+
+        LogLevel warn
+        {% if 'log_root' in vhost and vhost.log_root -%}
+        ErrorLog {{ vhost.log_root }}/error.log
+        CustomLog {{ vhost.log_root }}/access.log combined
+        {% endif %}
+
+        {% if 'port80_enforce_ssl' in vhost and vhost.port80_enforce_ssl == True -%}
+        RewriteEngine on
+        RewriteRule ^/(.*)$ https://{{ vhost.name }}/$1 [L,R=301]
+        {% endif %}
+
+        {% if 'port80_custom_parameters' in vhost -%}
+        {% for custom_parameter in vhost.port80_custom_parameters -%}
+        {{ custom_parameter }}
+        {% endfor %}
+        {% endif %}
+        
+</VirtualHost>
+
+{% if vhost.enable_port443 %}
+<VirtualHost *:443>
+        ServerName {{ vhost.name }}
+        {% if 'serveralias' in vhost -%}
+        {% for serveralias in vhost.serveralias -%}
+        ServerAlias {{ serveralias }}
+        {% endfor -%}
+        {%- endif -%}
+
+        {%- if 'admin_email' in vhost -%}
+        ServerAdmin {{ vhost.admin_email }}
+        {% endif %}
+
+        {%- if 'document_root' in vhost and vhost.document_root -%}
+        DocumentRoot {{ vhost.document_root }}
+        {% endif %}
+
+        {% if 'port443_directory' not in vhost -%}
+        <Directory {{ vhost.document_root }}>
+                Options -Indexes +FollowSymLinks +MultiViews
+                AllowOverride {{ vhost.document_root_allow_override | default('None') }}
+        </Directory>
+        {% else -%}
+                {%- set directories = vhost.port443_directory -%}
+                {% include 'directory.j2' %}
+        {% endif -%}
+
+        {% if 'port443_alias' in vhost -%}
+
+                {% set aliases = vhost.port443_alias %}
+                {% include 'alias.j2' %}
+
+        {% endif -%}
+
+        {% if 'phpfpm_version' in vhost %}
+
+        <FilesMatch ".+\.ph(ar|p|html)$">
+                SetHandler "proxy:unix:/var/run/php{{ vhost.phpfpm_version }}-fpm-{{ vhost.name }}.sock|fcgi://localhost"
+        </FilesMatch>
+        <FilesMatch ".+\.phps$">
+                # Deny access to raw php sources by default
+                Require all denied
+        </FilesMatch>
+        <FilesMatch "^\.ph(ar|p|html)$">
+                # Deny access to files without filename (e.g. '.php')
+                Require all denied
+        </FilesMatch>
+        {% endif %}
+
+        LogLevel warn
+        {% if 'log_root' in vhost and vhost.log_root -%}
+        ErrorLog {{ vhost.log_root }}/error.log
+        CustomLog {{ vhost.log_root }}/access.log combined
+        {% endif %}
+
+        SSLEngine On
+        SSLCertificateFILE     {{ vhost.ssl_cert_file }}
+        SSLCertificateKeyFILE  {{ vhost.ssl_key_file }}
+
+        {% if 'port443_custom_parameters' in vhost -%}
+        {%- for custom_parameter in vhost.port443_custom_parameters -%}
+        {{ custom_parameter }}
+        {% endfor -%}
+        {%- endif %}
+
+</VirtualHost>
+{% endif %}

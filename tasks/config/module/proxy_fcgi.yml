@@ -1,0 +1,9 @@
+## Apache2 proxy_fcgi config
+
+- name: config | module | proxy_fcgi | Enable mod_proxy_fcgi
+  apache2_module:
+    name: proxy_fcgi
+    state: present
+    ignore_configcheck: yes
+  notify:
+    - Test apache2 and reload

@@ -1,0 +1,12 @@
+---
+## Apache2 Vhosts create
+
+- name: "install | vhosts | Create vhosts"
+  include_tasks: vhost.yml
+  loop: "{{ apache2__vhosts }}"
+
+- name: install | vhosts | Remove default vhost in sites-enabled.
+  file:
+    path: '{{ apache2__app_path }}/sites-enabled/000-default.conf'
+    state: absent
+  notify: Test apache2 and reload

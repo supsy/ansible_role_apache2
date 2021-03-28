@@ -1,0 +1,11 @@
+## Apache2 Handlers.
+---
+
+- name: Test apache2 and reload
+  command: 'apache2ctl configtest'
+  notify: [ 'Reload apache2' ]
+
+- name: Reload apache2
+  service:
+    name: 'apache2'
+    state: 'reloaded'

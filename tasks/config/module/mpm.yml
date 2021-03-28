@@ -1,0 +1,68 @@
+## Apache2 MPM config
+---
+
+- name: config | module | mpm | Selected MPM 
+  debug:
+    msg: "{{ apache2__mpm }}"
+
+# Disable first
+- name: config | module | mpm | Disable mpm_itk
+  apache2_module:
+    name: mpm_itk
+    state: absent
+    ignore_configcheck: yes
+  notify:
+    - Test apache2 and reload
+  when: ansible_os_family == 'Debian' and apache2__mpm != 'itk'
+
+- name: config | module | mpm | Disable mpm_prefork
+  apache2_module:
+    name: mpm_prefork
+    state: absent
+    ignore_configcheck: yes
+  notify:
+    - Test apache2 and reload
+  when: ansible_os_family == 'Debian' and (apache2__mpm != 'prefork' and apache2__mpm != 'itk')
+
+- name: config | module | mpm | Disable mpm_event
+  apache2_module:
+    name: mpm_event
+    state: absent
+    ignore_configcheck: yes
+  notify:
+    - Test apache2 and reload
+  when: ansible_os_family == 'Debian' and apache2__mpm != 'event'
+
+# Enable mpm
+- name: config | module | mpm | Install mpm_itk and required packages for debian
+  apt: 
+    name: '{{ apache2__mpm_itk_packages }}'
+    state: present
+  when: ansible_os_family == 'Debian' and apache2__mpm == 'itk'
+
+- name: config | module | mpm | Enable mpm_itk
+  apache2_module:
+    name: mpm_itk
+    state: present
+    ignore_configcheck: yes
+  notify:
+    - Test apache2 and reload
+  when: ansible_os_family == 'Debian' and apache2__mpm == 'itk'
+
+- name: config | module | mpm | Set mpm_prefork
+  apache2_module:
+    name: mpm_prefork
+    state: present
+    ignore_configcheck: yes
+  notify:
+    - Test apache2 and reload
+  when: ansible_os_family == 'Debian' and apache2__mpm == 'prefork' or apache2__mpm == 'itk'
+
+- name: config | module | mpm | Set mpm_event
+  apache2_module:
+    name: mpm_event
+    state: present
+    ignore_configcheck: yes
+  notify:
+    - Test apache2 and reload
+  when: ansible_os_family == 'Debian' and apache2__mpm == 'event'

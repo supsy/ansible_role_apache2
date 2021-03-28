@@ -1,0 +1,15 @@
+## Apache2 mod_security2 config
+
+- name: config | module | security2 | Install libapache2-mod-security2
+  apt: 
+    name: libapache2-mod-security2
+    state: present
+  when: ansible_os_family == 'Debian'
+
+- name: config | module | security2 | Enable mod_security2
+  apache2_module:
+    name: security2
+    state: present
+    ignore_configcheck: yes
+  notify:
+    - Test apache2 and reload

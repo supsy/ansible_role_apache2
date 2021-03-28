@@ -1,0 +1,28 @@
+## YAML Template.
+---
+
+- name: Include meta vars
+  include_vars:
+    file: meta/main.yml
+    name: meta
+
+- name: Verify OS compatibility
+  assert:
+    that:
+      - ansible_distribution_release in (meta.galaxy_info.platforms | selectattr('name', 'search', ansible_distribution) | first).versions
+    success_msg: "{{ ansible_distribution }} {{ ansible_distribution_release }} ({{ ansible_os_family }})"
+    fail_msg: "{{ ansible_distribution }} {{ ansible_distribution_release }} ({{ ansible_os_family }}) not supported by Role!"
+
+- name: Add the OS specific variables
+  include_vars:
+    file: "{{ item }}"
+  when: lookup('fileglob', "vars/" ~ item, wantlist=True, errors='ignore') | length > 0
+  loop:
+    - "{{ ansible_os_family }}.yml"
+    - "{{ ansible_distribution }}/{{ ansible_distribution_release }}.yml"
+
+- name: Include task install
+  include_tasks: install.yml
+
+- name: Include task config
+  include_tasks: config.yml

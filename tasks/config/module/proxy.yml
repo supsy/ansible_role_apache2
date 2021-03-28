@@ -1,0 +1,9 @@
+## Apache2 mod_proxy config
+
+- name: config | module | proxy | Enable mod_proxy
+  apache2_module:
+    name: proxy
+    state: present
+    ignore_configcheck: yes
+  notify:
+    - Test apache2 and reload

@@ -1,0 +1,26 @@
+---
+
+apache2__show_ansible_management: False
+
+apache2__mpm: 'prefork'
+apache2__enable_mod_rewrite: True
+apache2__enable_mod_headers: True
+apache2__enable_mod_ssl: True
+apache2__enable_mod_http2: False
+apache2__enable_mod_security2: False
+apache2__enable_mod_expires: False
+apache2__enable_mod_proxy: False
+apache2__enable_mod_proxy_http: False
+apache2__enable_mod_proxy_fcgi: False
+
+apache2__vhosts_defaults_vhost_root: /var/www
+apache2__vhosts_defaults_port80_enforce_ssl: False
+apache2__vhosts_defaults_enable_port443: False
+apache2__vhosts_defaults_username: root
+apache2__vhosts: []
+
+apache2__server_signature: "Off"
+apache2__server_tokens: "Prod"
+apache2__security_config_template: conf/additional_security_conf.j2
+apache2__security_config_name: 'additional_security'
+apache2__security_custom_parameters: []

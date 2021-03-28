@@ -1,0 +1,26 @@
+- name: install | security | Disabling server signature
+  lineinfile:
+    path: "{{ apache2__config_path }}/security.conf"
+    regexp: '^ServerSignature .*'
+    line: ServerSignature {{ apache2__server_signature }}
+
+- name: install | security | Disabling server signature
+  lineinfile:
+    path: '{{ apache2__config_path }}/security.conf'
+    regexp: '^ServerTokens .*'
+    line: "ServerTokens {{ apache2__server_tokens }}"
+
+- name: install | security | Adding additional security configuration
+  template:
+    src: "{{ apache2__security_config_template }}"
+    dest: '{{ apache2__config_path }}/{{ apache2__security_config_name }}.conf'
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: install | security | Enable conf_{{ apache2__security_config_name }}
+  command: 
+    cmd: "/usr/sbin/a2enconf {{ apache2__security_config_name }}"
+    creates: "{{ apache2__app_path }}/conf-enabled/{{ apache2__security_config_name }}.conf"
+  notify:
+    - Test apache2 and reload

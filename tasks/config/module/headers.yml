@@ -1,0 +1,9 @@
+## Apache2 mod_headers config
+
+- name: config | module | headers | Enable mod_headers
+  apache2_module:
+    name: headers
+    state: present
+    ignore_configcheck: yes
+  notify:
+    - Test apache2 and reload

@@ -1,0 +1,25 @@
+---
+
+- name: config | Adding servername
+  lineinfile:
+    path: "{{ apache2__app_path }}/apache2.conf"
+    regexp: '^ServerName '
+    insertafter: '^#ServerRoot '
+    line: ServerName {{ ansible_hostname }}
+
+- name: config | Include task for module
+  include_tasks: config/module.yml
+  tags: [ 'role::apache2:module' ]
+
+- name: config | Include task for security
+  include_tasks: config/security.yml
+  tags: [ 'role::apache2:security' ]
+
+- name: config | Include task for vhost
+  include_tasks: config/vhosts.yml
+  tags: [ 'role::apache2:vhosts' ]
+
+- name: config | Remove preinstalled index.html
+  file:
+    path: "/var/www/html/index.html"
+    state: absent

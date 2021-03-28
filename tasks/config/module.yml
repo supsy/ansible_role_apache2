@@ -1,0 +1,40 @@
+---
+
+- name: config | module | Include task for mpm
+  include_tasks: config/module/mpm.yml
+
+- name: config | module | Include task for mod_headers
+  include_tasks: config/module/headers.yml
+  when: apache2__enable_mod_headers
+
+- name: config | module | Include task for mod_rewrite
+  include_tasks: config/module/rewrite.yml
+  when: apache2__enable_mod_rewrite
+
+- name: config | module | Include task for mod_ssl
+  include_tasks: config/module/ssl.yml
+  when: apache2__enable_mod_ssl
+
+- name: config | module | Include task for mod_http2
+  include_tasks: config/module/http2.yml
+  when: apache2__enable_mod_http2
+
+- name: config | module | Include task for mod_security2
+  include_tasks: config/module/security2.yml
+  when: apache2__enable_mod_security2
+
+- name: config | module | Include task for mod_expires
+  include_tasks: config/module/expires.yml
+  when: apache2__enable_mod_expires
+
+- name: config | module | Include task for mod_proxy
+  include_tasks: config/module/proxy.yml
+  when: apache2__enable_mod_proxy
+
+- name: config | module | Include task for mod_proxy_http
+  include_tasks: config/module/proxy_http.yml
+  when: apache2__enable_mod_proxy_http
+
+- name: config | module | Include task for mod_proxy_fcgi
+  include_tasks: config/module/proxy_fcgi.yml
+  when: apache2__enable_mod_proxy_fcgi

@@ -1,0 +1,19 @@
+{%- for alias in aliases -%}
+    {%- if 'alias' in alias %}
+
+        Alias {{ alias.alias }} {{ alias.path }}
+
+    {%- elif aliasmatch in alias -%}
+
+        AliasMatch {{ alias.aliasmatch }} {{ alias.path }}
+
+    {%- elif scriptalias in alias -%}
+
+        ScriptAlias {{ alias.scriptalias }} {{ alias.path }}
+
+    {%- elif scriptaliasmatch in alias -%}
+
+        ScriptAliasMatch {{ alias.scriptaliasmatch }} {{ alias.path }}
+
+    {%- endif -%}
+{%- endfor %}

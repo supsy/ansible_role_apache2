@@ -1,0 +1,40 @@
+---
+
+stages:
+  - test
+
+ansible-lint:
+  image: python:3-slim
+  variables:
+    PY_COLORS: 1
+    GIT_CLONE_PATH: $CI_BUILDS_DIR/acmesh
+  stage: test
+  before_script:
+    - pip install ansible ansible-lint yamllint
+    - ansible-lint --version
+  script:
+    - ansible-lint .
+
+molecule:
+  image: supsy/molecule-systemd:base-ansible2.10
+  services:
+    - docker:dind
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    PY_COLORS: 1
+    GIT_CLONE_PATH: $CI_BUILDS_DIR/apache2
+  stage: test
+  script:
+    - molecule test
+  parallel:
+    matrix:
+      - MOLECULE_OS:
+          - debian9
+          - debian10
+          - "ubuntu20.04"
+        MOLECULE_PLAYBOOK:
+          - converge
+          - converge_mpm-event
+          - converge_vhost
+  tags:
+    - docker

@@ -1,0 +1,32 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+platforms:
+  - name: "${MOLECULE_OS}"
+    image: "supsy/molecule-systemd:${MOLECULE_OS}"
+    pre_build_image: true
+    capabilities:
+      - SYS_ADMIN
+    privileged: true #systemd apache2.service has PrivateTmp enabled. Needed for now.
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    tmpfs:
+      - /tmp
+      - /run
+      - /run/lock
+provisioner:
+  name: ansible
+  playbooks:
+    converge: ${MOLECULE_PLAYBOOK:-converge}.yml
+  config_options:
+    diff:
+      always: true
+    defaults:
+      stdout_callback: yaml
+      bin_ansible_callbacks: True
+    ssh_connection:
+      pipelining: True
+verifier:
+  name: goss
