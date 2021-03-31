@@ -1,5 +1,6 @@
 galaxy_info:
   author: supsy
+  role_name: apache2
   description: Installation for apache2
 
   issue_tracker_url: https://gitlab.com/supsy/ansible/role_apache2
