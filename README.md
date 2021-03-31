@@ -92,7 +92,7 @@ Available variables are listed below, along with default values (see `defaults/m
 ### Templates
 | Name                                  | Default Value                    | Description                    |
 |---------------------------------------|----------------------------------|--------------------------------|
-| `apache2__security_config_template`   | conf/additional_security_conf.j2 | Jinja2 Template for Apachge additional security configuration ({{ apache2__app_path }}/conf-enabled/{{ apache2__security_config_name }}.conf) |
+| `apache2__security_config_template`   | conf/additional_security_conf.j2 | Jinja2 Template for Apache additional security configuration ({{ apache2__app_path }}/conf-enabled/{{ apache2__security_config_name }}.conf) |
 
 
 
