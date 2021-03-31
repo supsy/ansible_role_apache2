@@ -20,8 +20,8 @@ Available variables are listed below, along with default values (see `defaults/m
 | `apache2__enable_mod_proxy`                   | `false`             | Enable apache2 module proxy. |
 | `apache2__enable_mod_proxy_http`              | `false`             | Enable apache2 module proxy http. |
 | `apache2__enable_mod_proxy_fcgi`              | `false`             | Enable apache2 module proxy fcgi. |
-| `apache2__server_signature`                   | "Off"               | Set the trailing footer line under server-generated documents. (On|Off|Email) |
-| `apache2__server_tokens`                      | "Off"               | Set the server response header field which is sent back to clients. (Major|Minor|Min[imal]|Prod[uctOnly]|OS|Full) |
+| `apache2__server_signature`                   | "Off"               | Set the trailing footer line under server-generated documents. (On/Off/Email) |
+| `apache2__server_tokens`                      | "Off"               | Set the server response header field which is sent back to clients. (Major/Minor/Min[imal]/Prod[uctOnly]/OS/Full) |
 | `apache2__security_config_name`               | additional_security | Specify the additional security configuration settings filename. ({{ apache2__app_path }}/conf-enabled/{{ apache2__security_config_name }}.conf) |
 | `apache2__security_custom_parameters`         | []                  | This is a list of additional security parameters |
 | `apache2__vhosts_defaults_vhost_root`         | /var/www            | Set root directory default for vhosts. |

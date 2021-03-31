@@ -82,30 +82,6 @@
     state: directory
   when: vhost.document_root
 
-- name: install | vhost | Create vhost sessions directory
-  file:
-    path: '{{ vhost.vhost_root }}/{{ vhost.name }}/sessions'
-    owner: '{{ vhost.username }}'
-    group: '{{ vhost.username }}'
-    mode: '0755'
-    state: directory
-
-- name: install | vhost | Create vhost files directory
-  file:
-    path: '{{ vhost.vhost_root }}/{{ vhost.name }}/files'
-    owner: '{{ vhost.username }}'
-    group: '{{ vhost.username }}'
-    mode: '0755'
-    state: directory
-
-- name: install | vhost | Create vhost tmp directory
-  file:
-    path: '{{ vhost.vhost_root }}/{{ vhost.name }}/tmp'
-    owner: '{{ vhost.username }}'
-    group: '{{ vhost.username }}'
-    mode: '0755'
-    state: directory
-
 - name: install | vhost | Create vhost logs directory
   file:
     path: '{{ vhost.log_root }}'
