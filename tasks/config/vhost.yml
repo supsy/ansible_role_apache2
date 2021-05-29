@@ -20,20 +20,30 @@
     vhost: "{{ vhost | combine({'username': apache2__vhosts_defaults_username}) }}"
   when: vhost.username is not defined
 
-- name: install | vhost | Set vhosts defaults document_root 
+- name: install | vhost | Set vhosts defaults servername 
   set_fact:
-    vhost: "{{ vhost | combine({'document_root': apache2__vhosts_defaults_vhost_root ~ '/' ~ vhost.name ~ '/htdocs'}) }}"
+    vhost: "{{ vhost | combine({'servername': vhost.name}) }}"
+  when: vhost.servername is not defined
+
+- name: install | vhost | Set vhosts defaults document_root
+  set_fact:
+    vhost: "{{ vhost | combine({'document_root': vhost.vhost_root ~ '/' ~ vhost.name ~ '/htdocs'}) }}"
   when: vhost.document_root is not defined
+
+- name: install | vhost | Set vhosts defaults document_root_options 
+  set_fact:
+    vhost: "{{ vhost | combine({'document_root_options': apache2__vhosts_defaults_document_root_options}) }}"
+  when: vhost.document_root_options is not defined
+
+- name: install | vhost | Set vhosts defaults document_root_allow_override 
+  set_fact:
+    vhost: "{{ vhost | combine({'document_root_allow_override': apache2__vhosts_defaults_document_root_allow_override}) }}"
+  when: vhost.document_root_allow_override is not defined
 
 - name: install | vhost | Set vhosts defaults log_root 
   set_fact:
-    vhost: "{{ vhost | combine({'log_root': apache2__vhosts_defaults_vhost_root ~ '/' ~ vhost.name ~ '/logs'}) }}"
+    vhost: "{{ vhost | combine({'log_root': vhost.vhost_root ~ '/' ~ vhost.name ~ '/logs'}) }}"
   when: vhost.log_root is not defined
-
-- name: install | vhost | Set vhosts defaults vhost_filename 
-  set_fact:
-    vhost: "{{ vhost | combine({'vhost_filename': vhost.name}) }}"
-  when: vhost.vhost_filename is not defined
 
 - name: install | vhost | Set vhosts defaults port80_enforce_ssl 
   set_fact:
@@ -116,7 +126,7 @@
 - name: install | vhost | Create vhost config
   template:
     src: sites/vhost_conf.j2
-    dest: '{{ apache2__config_vhost_path }}/{{ vhost.vhost_filename }}.conf'
+    dest: '{{ apache2__config_vhost_path }}/{{ vhost.name }}.conf'
     owner: 'root'
     group: 'root'
     mode: 0644
@@ -125,7 +135,7 @@
 
 - name: install | vhost | Enable vhost config
   command: 
-    cmd: /usr/sbin/a2ensite {{ vhost.vhost_filename }}
-    creates: '{{ apache2__app_path }}/sites-enabled/{{ vhost.vhost_filename }}.conf'
+    cmd: /usr/sbin/a2ensite {{ vhost.name }}
+    creates: '{{ apache2__app_path }}/sites-enabled/{{ vhost.name }}.conf'
   notify:
     - Test apache2 and reload

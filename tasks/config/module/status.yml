@@ -1,8 +1,9 @@
-## Apache2 mod_ssl config
+## Apache2 mod_status config
 
-- name: config | module | ssl | Enable mod_ssl
+
+- name: config | module | status | Enable mod_status
   apache2_module:
-    name: ssl
+    name: status
     state: present
     ignore_configcheck: yes
   notify:

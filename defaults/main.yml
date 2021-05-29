@@ -6,17 +6,21 @@ apache2__mpm: 'prefork'
 apache2__enable_mod_rewrite: True
 apache2__enable_mod_headers: True
 apache2__enable_mod_ssl: True
+apache2__enable_mod_status: False
 apache2__enable_mod_http2: False
 apache2__enable_mod_security2: False
 apache2__enable_mod_expires: False
 apache2__enable_mod_proxy: False
 apache2__enable_mod_proxy_http: False
 apache2__enable_mod_proxy_fcgi: False
+apache2__enable_mod_auth_openidc: False
 
 apache2__vhosts_defaults_vhost_root: /var/www/vhosts
 apache2__vhosts_defaults_port80_enforce_ssl: False
 apache2__vhosts_defaults_enable_port443: False
 apache2__vhosts_defaults_username: root
+apache2__vhosts_defaults_document_root_options: "-Indexes"
+apache2__vhosts_defaults_document_root_allow_override: "None"
 apache2__vhosts: []
 
 apache2__server_signature: "Off"

@@ -15,6 +15,10 @@
   include_tasks: config/module/ssl.yml
   when: apache2__enable_mod_ssl
 
+- name: config | module | Include task for mod_status
+  include_tasks: config/module/status.yml
+  when: apache2__enable_mod_status
+
 - name: config | module | Include task for mod_http2
   include_tasks: config/module/http2.yml
   when: apache2__enable_mod_http2
@@ -38,3 +42,7 @@
 - name: config | module | Include task for mod_proxy_fcgi
   include_tasks: config/module/proxy_fcgi.yml
   when: apache2__enable_mod_proxy_fcgi
+
+- name: config | module | Include task for mod_auth_openidc
+  include_tasks: config/module/auth_openidc.yml
+  when: apache2__enable_mod_auth_openidc

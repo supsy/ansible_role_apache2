@@ -1,0 +1,15 @@
+## Apache2 mod_auth_openidc config
+
+- name: config | module | auth_openidc | Install libapache2-mod-auth-openidc
+  apt: 
+    name: libapache2-mod-auth-openidc
+    state: present
+  when: ansible_os_family == 'Debian'
+
+- name: config | module | auth_openidc | Enable mod_auth_openidc
+  apache2_module:
+    name: auth_openidc
+    state: present
+    ignore_configcheck: yes
+  notify:
+    - Test apache2 and reload

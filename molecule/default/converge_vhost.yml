@@ -9,6 +9,7 @@
         apache2__enable_mod_security2: True
         apache2__enable_mod_expires: True
         apache2__enable_mod_proxy_http: True
+        apache2__enable_mod_ssl: True
         apache2__vhosts:
             - name: www.test.local
               serveralias:
@@ -21,7 +22,7 @@
               port443_directory:
                 - path: /opt/netbox/netbox/static
                   provider: directory
-                  options: ['FollowSymLinks', 'MultiViews']
+                  options: 'FollowSymLinks MultiViews'
                   require: ['all granted']
               port443_alias:
                 - alias: /static

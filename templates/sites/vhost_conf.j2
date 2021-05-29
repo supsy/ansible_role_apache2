@@ -1,7 +1,7 @@
 {{ '# FILE MANAGED BY ANSIBLE' if apache2__show_ansible_management -}}
 
 <VirtualHost *:80>
-        ServerName {{ vhost.name }}
+        ServerName {{ vhost.servername }}
         {% if 'serveralias' in vhost -%}
         {% for serveralias in vhost.serveralias -%}
         ServerAlias {{ serveralias }}
@@ -18,8 +18,9 @@
 
         {% if 'port80_directory' not in vhost -%}
         <Directory {{ vhost.document_root }}>
-                Options -Indexes +FollowSymLinks +MultiViews
-                AllowOverride {{ vhost.document_root_allow_override | default('None') }}
+                Options {{ vhost.document_root_options }}
+                AllowOverride {{ vhost.document_root_allow_override }}
+                Require all granted
         </Directory>
         {% else -%}
                 {%- set directories = vhost.port80_directory -%}
@@ -36,7 +37,7 @@
         {% if 'phpfpm_version' in vhost %}
 
         <FilesMatch ".+\.ph(ar|p|html)$">
-                SetHandler "proxy:unix:/var/run/php{{ vhost.phpfpm_version }}-fpm-{{ vhost.name }}.sock|fcgi://localhost"
+                SetHandler "proxy:unix:/var/run/php/php{{ vhost.phpfpm_version }}-fpm-{{ vhost.name }}.sock|fcgi://localhost"
         </FilesMatch>
         <FilesMatch ".+\.phps$">
                 # Deny access to raw php sources by default
@@ -56,7 +57,7 @@
 
         {% if 'port80_enforce_ssl' in vhost and vhost.port80_enforce_ssl == True -%}
         RewriteEngine on
-        RewriteRule ^/(.*)$ https://{{ vhost.name }}/$1 [L,R=301]
+        RewriteRule ^/(.*)$ https://{{ vhost.servername }}/$1 [L,R=301]
         {% endif %}
 
         {% if 'port80_custom_parameters' in vhost -%}
@@ -69,7 +70,7 @@
 
 {% if vhost.enable_port443 %}
 <VirtualHost *:443>
-        ServerName {{ vhost.name }}
+        ServerName {{ vhost.servername }}
         {% if 'serveralias' in vhost -%}
         {% for serveralias in vhost.serveralias -%}
         ServerAlias {{ serveralias }}
@@ -86,8 +87,9 @@
 
         {% if 'port443_directory' not in vhost -%}
         <Directory {{ vhost.document_root }}>
-                Options -Indexes +FollowSymLinks +MultiViews
-                AllowOverride {{ vhost.document_root_allow_override | default('None') }}
+                Options {{ vhost.document_root_options }}
+                AllowOverride {{ vhost.document_root_allow_override }}
+                Require all granted
         </Directory>
         {% else -%}
                 {%- set directories = vhost.port443_directory -%}
@@ -104,7 +106,7 @@
         {% if 'phpfpm_version' in vhost %}
 
         <FilesMatch ".+\.ph(ar|p|html)$">
-                SetHandler "proxy:unix:/var/run/php{{ vhost.phpfpm_version }}-fpm-{{ vhost.name }}.sock|fcgi://localhost"
+                SetHandler "proxy:unix:/var/run/php/php{{ vhost.phpfpm_version }}-fpm-{{ vhost.name }}.sock|fcgi://localhost"
         </FilesMatch>
         <FilesMatch ".+\.phps$">
                 # Deny access to raw php sources by default
