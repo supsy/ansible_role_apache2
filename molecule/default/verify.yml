@@ -19,16 +19,16 @@
 
     - name: Create Molecule directory for test files  # noqa 208
       file:
-        path: "{{ goss_test_directory }}/{{ lookup('env', 'MOLECULE_PLAYBOOK') | default('converge') }}"
+        path: "{{ goss_test_directory }}/{{ lookup('env', 'MOLECULE_PLAYBOOK') | default('converge', True) }}"
         state: directory
 
     - name: debug
       debug:
-        msg: "{{ lookup('env', 'MOLECULE_VERIFIER_TEST_DIRECTORY') }}/{{ lookup('env', 'MOLECULE_PLAYBOOK') | default('converge') }}"
+        msg: "{{ lookup('env', 'MOLECULE_VERIFIER_TEST_DIRECTORY') }}/{{ lookup('env', 'MOLECULE_PLAYBOOK') | default('converge', True) }}"
 
     - name: Find Goss tests on localhost
       find:
-        paths: "{{ lookup('env', 'MOLECULE_VERIFIER_TEST_DIRECTORY') }}/{{ lookup('env', 'MOLECULE_PLAYBOOK') | default('converge') }}"
+        paths: "{{ lookup('env', 'MOLECULE_VERIFIER_TEST_DIRECTORY') }}/{{ lookup('env', 'MOLECULE_PLAYBOOK') | default('converge', True) }}"
         patterns:
           - "test[-.\\w]*.yml"
           - "test_host_{{ ansible_hostname }}[-.\\w]*.yml"
@@ -48,12 +48,12 @@
     - name: Copy Goss tests to remote  # noqa 208
       copy:
         src: "{{ item.path }}"
-        dest: "{{ goss_test_directory }}/{{ lookup('env', 'MOLECULE_PLAYBOOK') | default('converge') }}/{{ item.path | basename }}"
+        dest: "{{ goss_test_directory }}/{{ lookup('env', 'MOLECULE_PLAYBOOK') | default('converge', True) }}/{{ item.path | basename }}"
       with_items:
         - "{{ test_files.files }}"
 
     - name: Register test files
-      shell: "ls {{ goss_test_directory }}/{{ lookup('env', 'MOLECULE_PLAYBOOK') | default('converge') }}/test_*.yml"  # noqa 301
+      shell: "ls {{ goss_test_directory }}/{{ lookup('env', 'MOLECULE_PLAYBOOK') | default('converge', True) }}/test_*.yml"  # noqa 301
       register: test_files
 
     - name: Execute Goss tests

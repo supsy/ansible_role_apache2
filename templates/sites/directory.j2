@@ -1,7 +1,7 @@
 {% for directory in directories -%}
 
 {% if directory.path is defined and directory.path != '' -%}
-    {% if directory.provider in ['directory', 'location', 'files'] -%}
+    {% if directory.provider in ['directory', 'location', 'files', 'directorymatch'] -%}
         {% set provider = directory.provider|capitalize %}
     {%- else -%}
         {% set provider = 'directory' %}
@@ -10,13 +10,13 @@
         <{{ provider }} "{{ directory.path  }}">
             {%- if directory.options is defined %}
 
-            Options {{ directory.options|join(' ') }}
+            Options {{ directory.options }}
 
             {%- endif -%}
 
             {%- if directory.allow_override is defined %}
 
-            AllowOverride {{ directory.allow_override|join(' ') }}
+            AllowOverride {{ directory.allow_override }}
 
             {%- elif provider == 'directory' %}
 
@@ -75,7 +75,9 @@
 
             {%- if directory.custom_fragment is defined %}
 
-{{ directory.custom_fragment }}
+            {% for custom_parameter in directory.custom_fragment -%}
+            {{     custom_parameter }}
+            {% endfor -%}
 
             {%- endif %}
 

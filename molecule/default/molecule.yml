@@ -4,8 +4,8 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: "${MOLECULE_OS}"
-    image: "supsy/molecule-systemd:${MOLECULE_OS}"
+  - name: "${MOLECULE_OS:-debian10}"
+    image: "supsy/molecule-systemd:${MOLECULE_OS:-debian10}"
     pre_build_image: true
     capabilities:
       - SYS_ADMIN
