@@ -1,87 +1,60 @@
-{% for directory in directories -%}
-
-{% if directory.path is defined and directory.path != '' -%}
-    {% if directory.provider in ['directory', 'location', 'files', 'directorymatch'] -%}
-        {% set provider = directory.provider|capitalize %}
-    {%- else -%}
-        {% set provider = 'directory' %}
-    {%- endif %}
+{% for directory in directories %}
+{%     if directory.path is defined and directory.path != '' -%}
+{%         if directory.provider in ['directory', 'location', 'files', 'directorymatch'] -%}
+{%             set provider = directory.provider|capitalize %}
+{%-        else -%}
+{%             set provider = 'directory' %}
+{%-        endif %}
 
         <{{ provider }} "{{ directory.path  }}">
-            {%- if directory.options is defined %}
-
+{%         if directory.options is defined %}
             Options {{ directory.options }}
-
-            {%- endif -%}
-
-            {%- if directory.allow_override is defined %}
-
+{%         endif %}
+{%         if directory.allow_override is defined %}
             AllowOverride {{ directory.allow_override }}
-
-            {%- elif provider == 'directory' %}
-
+{%         elif provider == 'directory' %}
             AllowOverride None
+{%         endif %}
+{%         if directory.require is defined %}
+{%             for require in directory.require %}
+            Require {{ require }}
+{%             endfor %}
+{%         endif %}
 
-            {%- endif -%}
-
-            {%- if directory.require is defined %}
-
-            Require {{ directory.require|join(' ') }}
-
-            {%- endif -%}
-
-            {%- if directory.rewrite is defined %}
-
-
+{%         if directory.rewrite is defined %}
             ## Rewrite rules
             RewriteEngine On
-
-            {%- if directory.rewrite_base is defined %}
-
+{%             if directory.rewrite_base is defined %}
             RewriteBase {{ directory.rewrite_base }}
+{%              endif %}
 
-            {%- endif -%}
-
-            {%- for rewrite in directory.rewrite -%}
-                {%- if rewrite.comment is defined %}
-
+{%             for rewrite in directory.rewrite %}
+{%                 if rewrite.comment is defined %}
             #{{ rewrite.comment }}
-                {%- endif -%}
-
-                {%- if rewrite.rewrite_base is defined %}
-
+{%                 endif %}
+{%                 if rewrite.rewrite_base is defined %}
             RewriteBase {{ rewrite.rewrite_base }}
+{%                 endif %}
 
-                {%- endif -%}
-
-                {%- if rewrite.rewrite_cond is defined -%}
-                    {%- for condition in rewrite.rewrite_cond %}
-
+{%                 if rewrite.rewrite_cond is defined %}
+{%                     for condition in rewrite.rewrite_cond %}
             RewriteCond {{ condition }}
+{%                     endfor %}
+{%                 endif %}
 
-                    {%- endfor %}
-                {%- endif -%}
-
-                {%- if rewrite.rewrite_rule is defined -%}
-                    {%- for rule in rewrite.rewrite_rule %}
-
+{%                 if rewrite.rewrite_rule is defined %}
+{%                     for rule in rewrite.rewrite_rule %}
             RewriteRule {{ rule }}
+{%                     endfor %}
+{%                 endif %}
+{%             endfor %}
+{%         endif %}
 
-                    {%- endfor -%}
-                {%- endif -%}
-            {%- endfor -%}
-
-            {%- endif -%}
-
-            {%- if directory.custom_fragment is defined %}
-
-            {% for custom_parameter in directory.custom_fragment -%}
-            {{     custom_parameter }}
-            {% endfor -%}
-
-            {%- endif %}
-
+{%         if directory.custom_fragment is defined %}
+{%             for custom_parameter in directory.custom_fragment %}
+            {{ custom_parameter }}
+{%             endfor %}
+{%         endif %}
         </{{ provider }}>
-{% endif -%}
-
+{%     endif %}
 {% endfor %}

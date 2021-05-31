@@ -141,7 +141,7 @@ Example Playbook
                 port443_directory:
                   - path: /opt/netbox/netbox/static
                     provider: directory
-                    options: ['FollowSymLinks', 'MultiViews']
+                    options: 'FollowSymLinks MultiViews'
                     require: ['all granted']
                 port443_alias:
                   - alias: /static
