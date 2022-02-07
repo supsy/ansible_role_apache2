@@ -31,6 +31,7 @@ molecule:
       - MOLECULE_OS:
           - debian9
           - debian10
+          - debian11
           - "ubuntu20.04"
         MOLECULE_PLAYBOOK:
           - converge
