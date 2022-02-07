@@ -65,6 +65,10 @@
         {{ custom_parameter }}
         {% endfor %}
         {% endif %}
+
+        {% if apache2__mpm == 'itk' -%}
+        AssignUserId {{ vhost.username }} {{ vhost.username }}
+        {% endif %}
         
 </VirtualHost>
 
@@ -133,6 +137,10 @@
         {{ custom_parameter }}
         {% endfor -%}
         {%- endif %}
+
+        {% if apache2__mpm == 'itk' -%}
+        AssignUserId {{ vhost.username }} {{ vhost.username }}
+        {% endif %}
 
 </VirtualHost>
 {% endif %}
